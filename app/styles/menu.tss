@@ -1,0 +1,34 @@
+"#container": {
+	top: 0, right: 0, left: 0,
+	height: Ti.UI.SIZE
+}
+ 
+"#bar": {
+	top: 0, right: 0, left: 0,
+	height: 44,
+	
+	bubbleParent: false, // Stop taps from bubbling to container, causing hide
+		
+	backgroundColor: 'red'
+}
+ 
+"#toggle": {
+	left: 0
+}
+ 
+"#options": {
+	top: 0, right: 0, left: 0,
+	height: Ti.UI.SIZE,
+	layout: 'vertical',
+	
+	bubbleParent: false, // Stop taps from bubbling to container, causing hide
+	
+	backgroundColor: '#5f00'
+}
+ 
+".option": {
+	top: 0, right: 0, left: 0,
+	height: 44,
+	
+	backgroundColor: 'yellow'
+}
