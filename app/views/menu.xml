@@ -1,17 +1,4 @@
 <Alloy>
- 	<!-- Tapping the mask hides the options -->
- 	<View id="container" onClick="hide">
-		
-		<!-- Swiping the options up hides them -->
-		<View id="options" onSwipe="mayHide">
-			<View class="option"><Label>One</Label></View>
-			<View class="option"><Label>Two</Label></View>
-			<View class="option"><Label>Three</Label></View>
-		</View>
-		
-		<!-- Bar comes after options so they slide in from under the bar -->
-		<View id="bar">
-			<Button id="toggle" onClick="toggle">M</Button>
-		</View>
+	<View id="bar">
 	</View>
 </Alloy>

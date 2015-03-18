@@ -1,5 +1,0 @@
-<Alloy>
-	<Window id="win" class="container">
-		<Require src="menu" />	
-	</Window>
-</Alloy>
