@@ -11,16 +11,19 @@ function fpercent(quantity, percent)
     return quantity * percent / 100;
 }
 
-var barHeight = fpercentStr(Ti.Platform.displayCaps.platformHeight, $.bar.getHeight());
+var bar = $.bar;
+// Transform percentage height to decimal equivalent
+var barHeight = fpercentStr(Ti.Platform.displayCaps.platformHeight, bar.getHeight());
 var statusBarHeight = Alloy.Globals.StatusBarHeight;
-var buttonHeight = "40%";
-var menuTop = (barHeight - fpercentStr(barHeight, buttonHeight))/2 + statusBarHeight/4;
+var elementHeight = "40%";
+var elementWidth = "8%";
+var menuTop = (barHeight - fpercentStr(barHeight, elementHeight))/2 + statusBarHeight/4;
 
 var configButton = Titanium.UI.createButton({
    top: menuTop,
-   image:'/images/configuration.png',
-   width: "8%",
-   height: buttonHeight,
+   backgroundImage:'/images/views/topbar/configuration.png',
+   width: elementWidth,
+   height: elementHeight,
    left: "5%"
 });
 configButton.addEventListener('click',function(e)
@@ -28,40 +31,53 @@ configButton.addEventListener('click',function(e)
    Titanium.API.info("You clicked the button");
 });
 
-var chatButton = Titanium.UI.createButton({
-   top: menuTop,
-   image:'/images/chat.png',
-   width: "8%",
-   height: buttonHeight,
-   right: "5%"
-});
-chatButton.addEventListener('click',function(e)
-{
-   Titanium.API.info("You clicked the button");
+var pointsTxt = Ti.UI.createLabel({
+	color: '#FFFFFF',
+	font: { fontSize:40 },
+	text: '2.000'
 });
 
+var wurfIconWidth = fpercentStr(Ti.Platform.displayCaps.platformHeight, "5%");
+var wurfIconLeft = (Ti.Platform.displayCaps.platformWidth - (wurfIconWidth + pointsTxt.toImage().width))/2;
+
+var wurfIcon = Ti.UI.createImageView({ 
+	left: wurfIconLeft,
+	width: wurfIconWidth,
+	height: elementHeight,
+	borderRadius:20,
+	borderWidth: 2,
+	borderColor: "#707070",
+    image:'/images/views/topbar/wurf_icon.png'
+});
+
+pointsTxt.setLeft(wurfIconLeft+fpercentStr(Ti.Platform.displayCaps.platformHeight, "6%"));
+
 var categoryButton = Titanium.UI.createButton({
-   top: menuTop,
-   image:'/images/category.png',
-   width: "8%",
-   height: buttonHeight,
-   right: "20%"
+   	top: menuTop,
+   	backgroundImage:'/images/views/topbar/category.png',
+   	width: elementWidth,
+   	height: elementHeight,
+   	right: "20%"
 });
 categoryButton.addEventListener('click',function(e)
 {
    Titanium.API.info("You clicked the button");
 });
 
-var points = Ti.UI.createLabel({
-  color: '#000000',
-  font: { fontSize:20 },
-  text: '200000',
-  textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER,
-  top: menuTop,
-  width: Ti.UI.SIZE, height: Ti.UI.SIZE
+var chatButton = Titanium.UI.createButton({
+   	top: menuTop,
+   	backgroundImage:'/images/views/topbar/chat.png',
+   	width: elementWidth,
+   	height: elementHeight,
+   	right: "5%"
+});
+chatButton.addEventListener('click',function(e)
+{
+   Titanium.API.info("You clicked the button");
 });
 
 $.bar.add(configButton);
+$.bar.add(wurfIcon);
+$.bar.add(pointsTxt);
 $.bar.add(categoryButton);
 $.bar.add(chatButton);
-$.bar.add(points);

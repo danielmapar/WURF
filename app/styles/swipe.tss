@@ -4,20 +4,13 @@
 
 "#container": {
 	top: 0, right: 0, left: 0,
-	height: "100%"
+	height: "100%",
+	width: "100%"
 }
 
 "#body": {
 	top: "10%", right: 0, left: 0,
 	height: "90%",
+	width: "100%",
 	backgroundColor: '#FFFFFF'
-}
-
-"#question": {
-	top: "5%", bottom: "5%", right: "5%", left: "5%",
-	height: "90%",
-	width: "90%",
-	backgroundColor: '#FFFFFF',
-	borderColor: "#000000",
-    borderWidth: 1
 }

@@ -1,64 +1,86 @@
-var win = $.win;
-var statusBarHeight = Alloy.Globals.StatusBarHeight;
-
-// Use the Alloy.Globals.Facebook namespace to make Facebook module API calls
 var facebook = Alloy.Globals.Facebook;
-facebook.appid = Ti.App.Properties.getString('ti.facebook.appid');
-facebook.permissions = ['publish_stream'];
 
-// Add events to the facebook button
-facebook.addEventListener('login', function(e) {
-    if (e.success) {
-        console.log(e);
-    		win.close();
-    		var swipe = Alloy.createController("swipe", {}).getView();
-		swipe.open();
-    }
-});
-facebook.addEventListener('logout', function(e) {
-    alert('Logged out');
-});
-    
-// Add the button.
-win.add(facebook.createLoginButton({
-    style : facebook.BUTTON_STYLE_WIDE,
-    bottom: "2.5%"	
-}));
-
-var view1 = Ti.UI.createImageView({ 
-	width:"100%",
-    height:"100%",
-    image:'http://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/' +
-    'Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/' +
-    '402px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg'
-});
-var view2 = Ti.UI.createImageView({ 
-	width:"100%",
-    height:"100%",
-    image: 'http://www.nasa.gov/images/content/' + 
-    '616903main_rover_comparison1600_1600-1200.jpg'
-});
-var view3 = Ti.UI.createImageView({ 
-	width:"100%",
-    height:"100%",
-    image: 'http://www.nasa.gov/images/content/' + 
-    '616903main_rover_comparison1600_1600-1200.jpg'
-});
-
-var photosView = Ti.UI.createScrollableView({
-	width: '90%',
-	height: '80%',
-	top: statusBarHeight, bottom: 0, left: "5%", right: "5%",
-    showPagingControl: false,
-    currentPageIndicatorTintColor:'black',
-    overlayEnabled:true,
-    pagingControlColor:'transparent',
-    views: [
-        view1,
-        view2,
-        view3
-    ],
-});
-
-win.add(photosView);
-win.open();
+// Already logged in
+if(facebook.loggedIn == true){
+	var swipe = Alloy.createController("swipe", {}).getView();
+	swipe.open();
+}else{
+	var win = $.win;
+	var container = $.container;
+	
+	// Use the Alloy.Globals.Facebook namespace to make Facebook module API calls
+	facebook.appid = Ti.App.Properties.getString('ti.facebook.appid');
+	facebook.permissions = ['publish_stream'];
+		    
+	// Add Facebook button.
+	var facebookBtn = Titanium.UI.createButton({ 
+	    backgroundImage:'/images/views/login/login_btn.png',
+		bottom: "2.5%", left: "20%", right: "20%",
+		width:"60%",
+	    height:"8%",
+	});
+	
+	// Add events to the facebook button
+	facebookBtn.addEventListener('click', function(e) {
+    		if(facebook.getLoggedIn()){
+        		facebook.logout();
+    		}else{
+        		facebook.authorize();
+    		}
+	});
+	facebook.addEventListener('login', function(e) {
+	    if (e.success) {
+	    		facebookBtn.setBackgroundImage('/images/views/login/logout_btn.png');
+	        console.log(e);
+	    		var swipe = Alloy.createController("swipe", {}).getView();
+			swipe.open();
+	    }
+	});
+	facebook.addEventListener('logout', function(e) {
+		facebookBtn.setBackgroundImage('/images/views/login/login_btn.png');
+	    alert('Logged out');
+	});
+	
+	var logo = Ti.UI.createImageView({ 
+		top: "2.5%", bottom: 0, left: "25%", right: "25%",
+		width:"50%",
+	    height:"15%",
+	    image:'/images/views/login/logo_wurf.png'
+	});
+	
+	var slide1 = Ti.UI.createImageView({ 
+		width:"100%",
+	    height:"100%",
+	    image:'/images/views/login/slide01.jpg'
+	});
+	var slide2 = Ti.UI.createImageView({ 
+		width:"100%",
+	    height:"100%",
+	    image:'/images/views/login/slide02.jpg'
+	});
+	var slide3 = Ti.UI.createImageView({ 
+		width:"100%",
+	    height:"100%",
+	    image:'/images/views/login/slide03.jpg'
+	});
+	
+	var photoShow = Ti.UI.createScrollableView({
+		width: '100%',
+		height: '65%',
+		top: "21%", bottom: 0, left: 0, right: 0,
+	    showPagingControl: true,
+	    //overlayEnabled:false,
+	    pagingControlColor:'transparent',
+	    views: [
+	        slide1,
+	        slide2,
+	        slide3
+	    ],
+	});
+	
+	container.add(logo);
+	container.add(photoShow);
+	container.add(facebookBtn);
+	
+	win.open();
+}

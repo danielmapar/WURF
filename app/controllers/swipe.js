@@ -1,54 +1,55 @@
 var args = arguments[0] || {};
 
 var win = $.win;
-var question = $.question;
+var container = $.container;
+var body = $.body;
 
-var firstImage = Ti.UI.createImageView({
-	width:"100%",
-	height:"100%",
-	top:0, left:0, right:0, botoom: 0,
-	image:'http://userserve-ak.last.fm/serve/252/53031387.jpg' /* accepts URL, local path, or Ti.Filesystem.File */
+// animations
+var animateLeft = Ti.UI.createAnimation({
+	left: "-100%",
+    transform: Ti.UI.create2DMatrix({rotate: 30}),
+    opacity: 0,
+    duration: 500
+});
+var animateRight = Ti.UI.createAnimation({
+    left: "100%",
+    transform: Ti.UI.create2DMatrix({rotate: -30}),
+    opacity: 0,
+    duration: 500
 });
 
-question.add(firstImage);
-
-var olt = Titanium.UI.create3DMatrix();
-this.transformClose = olt;
-
-var curX, curY;
-
-question.addEventListener('touchstart', function(e) {
-    curX = e.x; curY = e.y;
+var view1 = Ti.UI.createView({
+  backgroundColor: '#ff0000', 
+  top: "5%", bottom: "5%", right: "5%", left: "5%",
+  height: "90%",
+  width: "90%",
+  borderColor: "#000000",
+  borderWidth: 1
 });
- 
-var deltaX , deltaY;
-question.addEventListener('touchmove', function(e) {
-    deltaX = e.x - curX;
-    deltaY = e.y - curY; 
-    olt = olt.translate(deltaX, deltaY, 0); 
-    question.animate({transform:olt, duration:1});
+
+var view2 = Ti.UI.createView({
+  backgroundColor: '#ff0000', 
+  top: "5%", bottom: "5%", right: "5%", left: "5%",
+  height: "90%",
+  width: "90%",
+  borderColor: "#000000",
+  borderWidth: 1
 });
- 
-question.addEventListener('touchend', function(e) {
-   	var startPositionX = Ti.Platform.displayCaps.platformWidth*0.05;
-   	var currentPositionX = question.getRect().getX();
-   	var startPositionY = Ti.Platform.displayCaps.platformHeight*0.05;
-   	var currentPositionY = question.getRect().getY();
-   	
-   	if(currentPositionX <= startPositionX){
-   		deltaX = startPositionX-currentPositionX;
-   	}else{
-   		deltaX = (currentPositionX-startPositionX)*-1;
-   	}
-   	
-   	if(currentPositionY <= startPositionY){
-   		deltaY = startPositionY-currentPositionY;
-   	}else{
-   		deltaY = (currentPositionY-startPositionY)*-1;
-   	}
-   	
-   	olt = olt.translate(deltaX, deltaY, 0);
-   	question.animate({transform:olt, duration:600});
-});
+
+view1.addEventListener('swipe', swipe);
+view2.addEventListener('swipe', swipe);
+
+body.add(view1);
+body.add(view2);
+
+function swipe(e) {
+	
+	if (e.direction == 'left'){
+    		e.source.animate(animateLeft);
+  	}
+  	else if (e.direction == 'right'){
+    		e.source.animate(animateRight);
+  	}
+}
 
 win.open();

@@ -1,5 +1,5 @@
 "#bar": {
 	top: 0, right: 0, left: 0,
 	height: "10%",
-	backgroundColor: '#F0F0F0'
+	backgroundImage: "/images/views/topbar/background.jpg"
 }

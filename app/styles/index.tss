@@ -1,3 +1,9 @@
 "#win": {
-	backgroundColor:"white"
+	backgroundColor:"#F2F2F4"
+}
+
+"#container": {
+	top: Alloy.Globals.StatusBarHeight, right: 0, left: 0,
+	width: "100%",
+	backgroundColor:"#F2F2F4"
 }

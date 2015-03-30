@@ -3,8 +3,6 @@
  		<View id="container">
 			<Require src="menu" />	
 			<View id="body">
-				<View id="question">
-				</View>	
 			</View>
 		</View>
 	</Window>
