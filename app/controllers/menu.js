@@ -22,6 +22,29 @@ var elementHeight = "40%";
 var elementWidth = "8%";
 var elementWidthValue = fpercentStr(screenWidth, elementWidth);
 var menuTop = (barHeight - fpercentStr(barHeight, elementHeight))/2 + statusBarHeight/4;
+// Keep track of the points field width
+var pointsWidth = 0;
+
+Alloy.Globals.updatePoints = function(){
+	pointsTxt.text = (parseInt(pointsTxt.getText()) + 10).toString();
+	// Hack to calculate width
+	var tmpLabel = Ti.UI.createLabel({
+		font:{fontSize: fpercentStr(screenWidth, "7%")},
+		text: pointsTxt.text
+	});
+	if(tmpLabel.toImage().width != pointsWidth){
+		pointsWidth = tmpLabel.toImage().width;
+		var wurfIconLeft = (screenWidth - (elementWidthValue + pointsWidth))/2;
+		wurfIcon.animate(Ti.UI.createAnimation({
+			left: wurfIconLeft,
+	    		duration: 1000
+		}));
+		pointsTxt.animate(Ti.UI.createAnimation({
+			left: wurfIconLeft+fpercentStr(screenWidth, "9%"),
+	    		duration: 1000
+		}));
+	}
+};
 
 var configButton = Titanium.UI.createButton({
    top: menuTop,
@@ -41,7 +64,8 @@ pointsTxt = Ti.UI.createLabel({
 	text: '0'
 });
 
-var wurfIconLeft = (screenWidth - (elementWidthValue + pointsTxt.toImage().width))/2;
+var pointsTxtWidth = pointsTxt.toImage().width;
+var wurfIconLeft = (screenWidth - (elementWidthValue + pointsTxtWidth))/2;
 
 var wurfIcon = Ti.UI.createImageView({ 
 	top: menuTop,

@@ -15,24 +15,14 @@ function fpercent(quantity, percent)
 
 // animations
 var animateLeft = Ti.UI.createAnimation({
-	left: "-150%",
+	left: "-130%",
     transform: Ti.UI.create2DMatrix({rotate: -30}),
     duration: animationTime
 });
 var animateRight = Ti.UI.createAnimation({
-    left: "150%",
+    left: "130%",
     transform: Ti.UI.create2DMatrix({rotate: 30}),
     duration: animationTime
-});
-var animateLeftFaster = Ti.UI.createAnimation({
-	left: "-150%",
-    transform: Ti.UI.create2DMatrix({rotate: -30}),
-    duration: animationTime / 1.3
-});
-var animateRightFaster = Ti.UI.createAnimation({
-    left: "150%",
-    transform: Ti.UI.create2DMatrix({rotate: 30}),
-    duration: animationTime / 1.3
 });
 var animateDisappear = Ti.UI.createAnimation({
     opacity: 0,
@@ -119,7 +109,7 @@ function generateTwoOptionsQuestion(){
 		if ((e.direction == 'right' && e.source == rightPhoto) ||
 		    (e.direction == 'left' && e.source == leftPhoto)){
 		    // Increment points
-		    	pointsTxt.setText((parseInt(pointsTxt.getText()) + 10).toString());
+		    Alloy.Globals.updatePoints();
 		    	
 			if(e.direction == 'right' && e.source == rightPhoto){
 		    		rightPhoto.animate(animateRight);
@@ -197,7 +187,8 @@ function generateTrueOrFalseQuestion(){
 	questionContainer.addEventListener('swipe', function(e) {
 		if(e.source == photo && (e.direction == 'left' || e.direction == 'right')){
 			// Increment points
-			pointsTxt.setText((parseInt(pointsTxt.getText()) + 10).toString());
+			Alloy.Globals.updatePoints();
+			
 			if (e.direction == 'left'){
 				questionMark.backgroundImage = '/images/views/swipe/thumb_down.png';
 			    	questionMark.animate(animateDisappear);
