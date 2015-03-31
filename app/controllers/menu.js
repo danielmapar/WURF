@@ -1,7 +1,7 @@
 var args = arguments[0] || {};
 
-var screenWidth = Titanium.Platform.displayCaps.platformWidth;
-var screenHeight = Titanium.Platform.displayCaps.platformHeight;
+screenWidth = Titanium.Platform.displayCaps.platformWidth;
+screenHeight = Titanium.Platform.displayCaps.platformHeight;
 
 function fpercentStr(quantity, percentString)
 {
@@ -35,10 +35,10 @@ configButton.addEventListener('click',function(e)
    Titanium.API.info("You clicked the button");
 });
 
-var pointsTxt = Ti.UI.createLabel({
+pointsTxt = Ti.UI.createLabel({
 	color: '#FFFFFF',
 	font:{fontSize: fpercentStr(screenWidth, "7%")},
-	text: '2.000'
+	text: '0'
 });
 
 var wurfIconLeft = (screenWidth - (elementWidthValue + pointsTxt.toImage().width))/2;

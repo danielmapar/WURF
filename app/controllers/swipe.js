@@ -1,7 +1,6 @@
 var args = arguments[0] || {};
 
-var screenWidth = Titanium.Platform.displayCaps.platformWidth;
-var screenHeight = Titanium.Platform.displayCaps.platformHeight;
+var animationTime = 800;
 
 function fpercentStr(quantity, percentString)
 {
@@ -13,6 +12,36 @@ function fpercent(quantity, percent)
 {
     return quantity * percent / 100;
 }
+
+// animations
+var animateLeft = Ti.UI.createAnimation({
+	left: "-150%",
+    transform: Ti.UI.create2DMatrix({rotate: -30}),
+    duration: animationTime
+});
+var animateRight = Ti.UI.createAnimation({
+    left: "150%",
+    transform: Ti.UI.create2DMatrix({rotate: 30}),
+    duration: animationTime
+});
+var animateLeftFaster = Ti.UI.createAnimation({
+	left: "-150%",
+    transform: Ti.UI.create2DMatrix({rotate: -30}),
+    duration: animationTime / 1.3
+});
+var animateRightFaster = Ti.UI.createAnimation({
+    left: "150%",
+    transform: Ti.UI.create2DMatrix({rotate: 30}),
+    duration: animationTime / 1.3
+});
+var animateDisappear = Ti.UI.createAnimation({
+    opacity: 0,
+    duration: animationTime
+});
+var animateAppear = Ti.UI.createAnimation({
+    opacity: 100,
+    duration: animationTime
+});
 
 var win = $.win;
 var container = $.container;
@@ -26,32 +55,9 @@ var questionContainer = Ti.UI.createView({
 	width: "100%",
 });
 
-var animationTime = 800;
-
 body.add(questionContainer);
 
-// animations
-var animateLeft = Ti.UI.createAnimation({
-	left: "-150%",
-    transform: Ti.UI.create2DMatrix({rotate: -30}),
-    duration: animationTime
-});
-var animateRight = Ti.UI.createAnimation({
-    left: "150%",
-    transform: Ti.UI.create2DMatrix({rotate: 30}),
-    duration: animationTime
-});
-var animateDisappear = Ti.UI.createAnimation({
-    opacity: 0,
-    duration: animationTime
-});
-
-var animateAppear = Ti.UI.createAnimation({
-    opacity: 100,
-    duration: animationTime
-});
-
-function generateQuestion(){
+function generateTwoOptionsQuestion(){
 	
 	var questionMark = Ti.UI.createView({
 	  	backgroundImage:'/images/views/swipe/question_mark.png',
@@ -109,16 +115,12 @@ function generateQuestion(){
 	question.add(wurfTxt);
 	question.add(questionTxt);
 	
-	questionContainer.addEventListener('swipe', swipe);
-	questionContainer.add(questionMark);
-	questionContainer.add(leftPhoto);
-	questionContainer.add(rightPhoto);
-	questionContainer.add(question);
-	
-	questionContainer.animate(animateAppear);
-	
-	function swipe(e) {
-		if (e.direction == 'left' || e.direction == 'right'){
+	questionContainer.addEventListener('swipe', function(e) {
+		if ((e.direction == 'right' && e.source == rightPhoto) ||
+		    (e.direction == 'left' && e.source == leftPhoto)){
+		    // Increment points
+		    	pointsTxt.setText((parseInt(pointsTxt.getText()) + 10).toString());
+		    	
 			if(e.direction == 'right' && e.source == rightPhoto){
 		    		rightPhoto.animate(animateRight);
 		    		leftPhoto.animate(animateDisappear);
@@ -126,17 +128,99 @@ function generateQuestion(){
 		    		leftPhoto.animate(animateLeft);
 		    		rightPhoto.animate(animateDisappear);		    		
 			}
-			
 			questionMark.animate(animateDisappear);
 		    	question.animate(animateDisappear, function(){
 		    		questionContainer.removeAllChildren();
 				questionContainer.setOpacity(0);
-				generateQuestion();
-		    	});
+				generateTrueOrFalseQuestion();
+		    	});		    
 		}
-	}
+	});
+
+	questionContainer.add(questionMark);
+	questionContainer.add(leftPhoto);
+	questionContainer.add(rightPhoto);
+	questionContainer.add(question);
+
+	questionContainer.animate(animateAppear);
 }
 
-generateQuestion();
+function generateTrueOrFalseQuestion(){
+	
+	var questionMark = Ti.UI.createView({
+	  	backgroundImage:'/images/views/swipe/question_mark.png',
+	  	top: 0, 
+	  	height: "20%", left: "37.5%", right: "37.5%", 
+	  	width: "25%",
+	  	zIndex: 1
+	});
+	
+	var photo = Ti.UI.createView({
+	  	backgroundImage:'/images/views/swipe/temp/left.jpg', 
+	  	top: "5%", left: "5%", right: "5%",
+	  	height: "75%",
+	  	width: "90%",
+	  	borderColor: "#E3E3E5",
+		borderWidth: 1
+	});
+	
+	var question = Ti.UI.createView({
+	  	backgroundColor: "white",
+	  	top: "80%", left: "5%", right: "5%",
+	  	width: "90%", 
+	  	height: "20%",
+	  	borderColor: "#E3E3E5",
+	  	borderWidth: 1
+	});
+	
+	var wurfTxt = Ti.UI.createLabel({
+		top:"20%",
+		color: '#00948E',
+	  	font: {fontSize:fpercentStr(screenWidth, "5%"),
+	  		   fontWeight:'bold',
+	  		   fontFamily:'Arial'},
+	  	text: 'WOULD YOU RATHER FRIEND...',
+	  	textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER
+	});
+	
+	var questionTxt = Ti.UI.createLabel({
+		top:"40%",
+		color: '#00948E',
+	  	font: {fontSize:fpercentStr(screenWidth, "4%"), fontFamily:'Arial'},
+	  	text: 'Dance with Stela, or her professor Johson Pica das Galaxias?',
+	  	textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER
+	});
+	
+	question.add(wurfTxt);
+	question.add(questionTxt);
+	
+	questionContainer.addEventListener('swipe', function(e) {
+		if(e.source == photo && (e.direction == 'left' || e.direction == 'right')){
+			// Increment points
+			pointsTxt.setText((parseInt(pointsTxt.getText()) + 10).toString());
+			if (e.direction == 'left'){
+				questionMark.backgroundImage = '/images/views/swipe/thumb_down.png';
+			    	questionMark.animate(animateDisappear);
+			    	photo.animate(animateLeft);
+			}else if(e.direction == 'right'){
+				questionMark.backgroundImage = '/images/views/swipe/thumb_up.png';
+				questionMark.animate(animateDisappear);
+				photo.animate(animateRight); 	
+			}
+			question.animate(animateDisappear, function(){
+			    	questionContainer.removeAllChildren();
+				questionContainer.setOpacity(0);
+				generateTwoOptionsQuestion();
+			});
+		}
+	});
+	questionContainer.add(questionMark);
+	questionContainer.add(photo);
+	questionContainer.add(question);
+	
+	questionContainer.animate(animateAppear);
+}	
+
+generateTwoOptionsQuestion();
 
 win.open();
