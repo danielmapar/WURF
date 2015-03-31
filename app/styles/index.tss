@@ -1,9 +1,9 @@
 "#win": {
-	backgroundColor:"#F2F2F4"
+	backgroundImage: "/images/views/login/background.png"
 }
 
 "#container": {
 	top: Alloy.Globals.StatusBarHeight, right: 0, left: 0,
 	width: "100%",
-	backgroundColor:"#F2F2F4"
+	backgroundImage: "/images/views/login/background.png"
 }

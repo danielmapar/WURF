@@ -1,5 +1,8 @@
 var args = arguments[0] || {};
 
+var screenWidth = Titanium.Platform.displayCaps.platformWidth;
+var screenHeight = Titanium.Platform.displayCaps.platformHeight;
+
 function fpercentStr(quantity, percentString)
 {
     var percent = new Number(percentString.replace("%", ""));
@@ -13,10 +16,11 @@ function fpercent(quantity, percent)
 
 var bar = $.bar;
 // Transform percentage height to decimal equivalent
-var barHeight = fpercentStr(Ti.Platform.displayCaps.platformHeight, bar.getHeight());
+var barHeight = fpercentStr(screenHeight, bar.getHeight());
 var statusBarHeight = Alloy.Globals.StatusBarHeight;
 var elementHeight = "40%";
 var elementWidth = "8%";
+var elementWidthValue = fpercentStr(screenWidth, elementWidth);
 var menuTop = (barHeight - fpercentStr(barHeight, elementHeight))/2 + statusBarHeight/4;
 
 var configButton = Titanium.UI.createButton({
@@ -33,24 +37,26 @@ configButton.addEventListener('click',function(e)
 
 var pointsTxt = Ti.UI.createLabel({
 	color: '#FFFFFF',
-	font: { fontSize:40 },
+	font:{fontSize: fpercentStr(screenWidth, "7%")},
 	text: '2.000'
 });
 
-var wurfIconWidth = fpercentStr(Ti.Platform.displayCaps.platformHeight, "5%");
-var wurfIconLeft = (Ti.Platform.displayCaps.platformWidth - (wurfIconWidth + pointsTxt.toImage().width))/2;
+var wurfIconLeft = (screenWidth - (elementWidthValue + pointsTxt.toImage().width))/2;
 
 var wurfIcon = Ti.UI.createImageView({ 
+	top: menuTop,
 	left: wurfIconLeft,
-	width: wurfIconWidth,
+	width: elementWidthValue,
 	height: elementHeight,
-	borderRadius:20,
-	borderWidth: 2,
-	borderColor: "#707070",
     image:'/images/views/topbar/wurf_icon.png'
 });
 
-pointsTxt.setLeft(wurfIconLeft+fpercentStr(Ti.Platform.displayCaps.platformHeight, "6%"));
+pointsTxt.setLeft(wurfIconLeft+fpercentStr(screenWidth, "9%"));
+
+// Apply more space due to iOS status bar
+if(OS_IOS){
+	pointsTxt.setTop(menuTop);
+}
 
 var categoryButton = Titanium.UI.createButton({
    	top: menuTop,

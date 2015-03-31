@@ -51,23 +51,23 @@ if(facebook.loggedIn == true){
 	var slide1 = Ti.UI.createImageView({ 
 		width:"100%",
 	    height:"100%",
-	    image:'/images/views/login/slide01.jpg'
+	    image:'/images/views/login/slide01.png'
 	});
 	var slide2 = Ti.UI.createImageView({ 
 		width:"100%",
 	    height:"100%",
-	    image:'/images/views/login/slide02.jpg'
+	    image:'/images/views/login/slide02.png'
 	});
 	var slide3 = Ti.UI.createImageView({ 
 		width:"100%",
 	    height:"100%",
-	    image:'/images/views/login/slide03.jpg'
+	    image:'/images/views/login/slide03.png'
 	});
 	
 	var photoShow = Ti.UI.createScrollableView({
-		width: '100%',
+		width: '80%',
 		height: '65%',
-		top: "21%", bottom: 0, left: 0, right: 0,
+		top: "21%", bottom: 0, left: "10%", right: "10%",
 	    showPagingControl: true,
 	    //overlayEnabled:false,
 	    pagingControlColor:'transparent',
